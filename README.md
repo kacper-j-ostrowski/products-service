@@ -1,4 +1,4 @@
-#Products service
+# Products service #
 
 This service was created for interview purpose.
 <br />
@@ -37,7 +37,7 @@ and put output jar in environment which you prefer and run with command
 
 <br />
 
-##API 
+## API ##
 
 API consists of four endpoints consistent with REST approach:
 <br />
