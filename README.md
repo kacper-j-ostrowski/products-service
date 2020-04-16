@@ -48,5 +48,6 @@ __GET /products__ - get all active products (not obsolete - means softly deleted
 __PUT /products__ - updates product with changes (JSON in request body)  
 <br />
 __DELETE /products/{sku}__ - softly deletes product (changes obsolete flag to true)
-
+<br />
  
+ Service is running on port 9000 with H2 as a database 
