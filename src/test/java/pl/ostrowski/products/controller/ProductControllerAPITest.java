@@ -1,6 +1,7 @@
 package pl.ostrowski.products.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.ostrowski.products.dto.ProductDto;
+import pl.ostrowski.products.repository.ProductRepository;
 
 import java.math.BigDecimal;
 
@@ -25,9 +27,17 @@ class ProductControllerAPITest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @BeforeEach
     void setup() throws Exception {
         createTestProducts();
+    }
+
+    @AfterEach
+    void purgeDb() {
+        productRepository.deleteAll();
     }
 
     @Test
@@ -42,20 +52,20 @@ class ProductControllerAPITest {
 
     @Test
     void whenPostNewProducts_deleteOneOfThem_returnRest() throws Exception {
-        mockMvc.perform(delete("/products/1"))
+        mockMvc.perform(delete("/products/7"))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].sku", is(2)))
-                .andExpect(jsonPath("$[1].sku", is(3)));
+                .andExpect(jsonPath("$[0].sku", is(8)))
+                .andExpect(jsonPath("$[1].sku", is(9)));
 
     }
 
     @Test
     void whenPostNewProducts_updateOneOfThem_thenValueWasChangedProperly() throws Exception {
-        ProductDto updateProductDto = createProductDtoWithSku(2L);
+        ProductDto updateProductDto = createProductDtoWithSku(5L);
         updateProductDto.setName("new test name");
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writer().writeValueAsString(updateProductDto);
